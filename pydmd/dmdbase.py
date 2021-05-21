@@ -378,6 +378,12 @@ class DMDBase(object):
 
         return a
 
+    def time_dependent_reconstruction(self):
+        if self.original_time['dt'] is None:
+            raise ValueError('Delta t must be known to reconstruct time dependency.')
+        omega = omega = old_div(np.log(self.eigs), self.dmd_time['dt'])
+        return lambda time : self.modes.dot(np.diag(self.amplitudes).dot(np.exp(np.reshape(omega,(-1,1)).dot(np.reshape(time,(1,-1))))))
+
 
     def select_modes(self, func):
         """
